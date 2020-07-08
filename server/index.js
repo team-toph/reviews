@@ -23,6 +23,16 @@ app.get('/api/reviews', function(req, res) {
     });
 });
 
+app.post('/api/reviews', (req, res) => {
+  console.log(req.body);
+  var review = req.body;
+  Review.create(review)
+  .then(() => {
+    res.send('successfully posted review');
+  })
+  .catch(error => console.log(error))
+});
+
 app.patch('/api/reviews', function(req, res) {
   const id = req.query.id;
   const filter = { _id: req.body._id };
