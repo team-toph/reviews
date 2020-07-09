@@ -50,7 +50,46 @@ app.patch('/api/reviews', function(req, res) {
         res.status(200).json(result);
       });
     });
+});
 
+// Created a new POST route
+
+app.post('/api/reviews', (req, res) => {
+  // console.log(req.body);
+  req.body.id = req.query.id;
+  const review = req.body;
+  Review.create(review)
+    .then(() => {
+      res.send('successfully posted review');
+  })
+    .catch(error => console.log(error));
+});
+
+
+// Created a new PUT route
+
+app.put('/api/reviews', (req, res) => {
+  // console.log(req.query.id);
+  const id = req.query.id;
+  const body = req.body;
+  Review.update({ id }, body)
+    .then(() => {
+      res.send('successfully updated review');
+  })
+    .catch(error => console.log(error));
+});
+
+
+// Created a new DELETE route
+
+app.delete('/api/reviews', (req, res) => {
+  // console.log(req.query.id);
+  const id = req.query.id;
+  Review.deleteOne({ id })
+    .then(() => {
+      res.send('successfully deleted review')
+  })
+    .catch(error => console.log(error));
 });
 
 module.exports = app;
