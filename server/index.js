@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
+/* eslint-disable linebreak-style */
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
-
-const db = require('../db/index.js');
+// const db = require('../db/index.js');
 const Review = require('../db/comments.js');
 
 const app = express();
@@ -13,9 +14,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/public')));
 
-app.get('/api/reviews', function(req, res) {
+app.get('/api/reviews', (req, res) => {
   // console.log(req.query);
-  const id = req.query.id;
+  const { id } = req.query;
   Review.find({ id })
     .exec((err, result) => {
       if (err) { res.sendStatus(500).json('Error while getting reviews'); }
@@ -23,16 +24,16 @@ app.get('/api/reviews', function(req, res) {
     });
 });
 
-app.patch('/api/reviews', function(req, res) {
-  const id = req.query.id;
+app.patch('/api/reviews', (req, res) => {
+  const { id } = req.query;
   const filter = { _id: req.body._id };
-  const updateLike = req.body.like ? true : false;
+  const updateLike = !!req.body.like;
 
   Review.find({ id })
     .exec((err, result) => {
       if (err) { console.log('Error getting reviews', err); }
 
-      let allReviews = result[0].reviews;
+      const allReviews = result[0].reviews;
 
       for (let i = 0; i < allReviews.length; i++) {
         if (allReviews[i]._id.toString() === req.body._id) {
@@ -45,7 +46,7 @@ app.patch('/api/reviews', function(req, res) {
         }
       }
 
-      Review.findOneAndUpdate({ id }, { reviews: allReviews}, (err, result) => {
+      Review.findOneAndUpdate({ id }, { reviews: allReviews }, (err, result) => {
         if (err) { console.log('Error updating reviews', err); }
         res.status(200).json(result);
       });
@@ -55,41 +56,36 @@ app.patch('/api/reviews', function(req, res) {
 // Created a new POST route
 
 app.post('/api/reviews', (req, res) => {
-  // console.log(req.body);
   req.body.id = req.query.id;
   const review = req.body;
   Review.create(review)
     .then(() => {
       res.send('successfully posted review');
-  })
-    .catch(error => console.log(error));
+    })
+    .catch((error) => console.log(error));
 });
-
 
 // Created a new PUT route
 
 app.put('/api/reviews', (req, res) => {
-  // console.log(req.query.id);
-  const id = req.query.id;
-  const body = req.body;
+  const { id } = req.query;
+  const { body } = req;
   Review.update({ id }, body)
     .then(() => {
       res.send('successfully updated review');
-  })
-    .catch(error => console.log(error));
+    })
+    .catch((error) => console.log(error));
 });
-
 
 // Created a new DELETE route
 
 app.delete('/api/reviews', (req, res) => {
-  // console.log(req.query.id);
-  const id = req.query.id;
+  const { id } = req.query;
   Review.deleteOne({ id })
     .then(() => {
-      res.send('successfully deleted review')
-  })
-    .catch(error => console.log(error));
+      res.send('successfully deleted review');
+    })
+    .catch((error) => console.log(error));
 });
 
 module.exports = app;
