@@ -56,12 +56,13 @@ app.patch('/api/reviews', function(req, res) {
 
 app.post('/api/reviews', (req, res) => {
   // console.log(req.body);
+  req.body.id = req.query.id;
   const review = req.body;
   Review.create(review)
-  .then(() => {
-    res.send('successfully posted review');
+    .then(() => {
+      res.send('successfully posted review');
   })
-  .catch(error => console.log(error))
+    .catch(error => console.log(error));
 });
 
 
@@ -72,10 +73,10 @@ app.put('/api/reviews', (req, res) => {
   const id = req.query.id;
   const body = req.body;
   Review.update({ id }, body)
-  .then(() => {
-    res.send('successfully updated');
+    .then(() => {
+      res.send('successfully updated review');
   })
-  .catch(error => console.log(error))
+    .catch(error => console.log(error));
 });
 
 
@@ -85,10 +86,10 @@ app.delete('/api/reviews', (req, res) => {
   // console.log(req.query.id);
   const id = req.query.id;
   Review.deleteOne({ id })
-  .then(() => {
-    res.send('successfully deleted review')
+    .then(() => {
+      res.send('successfully deleted review')
   })
-  .catch(error => console.log(error))
+    .catch(error => console.log(error));
 });
 
 module.exports = app;
