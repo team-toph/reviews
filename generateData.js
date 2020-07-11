@@ -23,7 +23,7 @@ const generate = function(newId) {
 var start = Date.now();
 var writeStream = fs.createWriteStream('data.txt', {flags: 'a'});
 var count = 0;
-var total = 100000; // requires 10,000,000
+var total = 10000000; // requires 10,000,000
 var write = () => {
   var ready = true;
   while (count < total && ready) {
