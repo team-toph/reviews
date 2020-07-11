@@ -13,7 +13,7 @@ const insertSampleReviews = function() {
       reviews: reviewList
     });
   }
-
+  console.log(_data);
   Review.create(_data)
     .then(() => db.close())
     .catch(err => console.log(err));
