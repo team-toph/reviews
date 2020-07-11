@@ -3,7 +3,7 @@ const faker = require('faker');
 module.exports = {
   generate: function() {
     const storage = [];
-    const amountOfReviews = Math.floor(Math.random() * 5);
+    const amountOfReviews = Math.floor(Math.random() * 5) + 10;
 
     for (let i = 19; i >= amountOfReviews; i--) {
       const timestamp = faker.date.past();
