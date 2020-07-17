@@ -17,6 +17,8 @@ const setup = new Client({
 });
 
 const createReviewsTable = `CREATE TABLE reviews (
+  primaryId INTEGER PRIMARY KEY,
+  id INTEGER,
   timestamp TEXT,
   name TEXT,
   location TEXT,
@@ -51,7 +53,7 @@ const client = new Client({
 const dataCSV = path.join(__dirname, '/data.csv');
 console.log(dataCSV);
 
-const seed = `\COPY reviews(timestamp, name, location, title, comment, likes, dislikes, star) FROM '/Users/tonyperletti/reviews/data.csv' DELIMITER ',' CSV HEADER;`;
+const seed = `\COPY reviews(primaryId, id, timestamp, name, location, title, comment, likes, dislikes, star) FROM '/Users/tonyperletti/reviews/data.csv' DELIMITER ',' CSV HEADER;`;
 
 // const seed = `INSERT INTO reviews (timestamp, name, location, title, comment, likes, dislikes, star) VALUES (\'5:45pm\', \'John\', \'New York\', \'Mayor\', \' He good\', 10, 5, 10)`;
 

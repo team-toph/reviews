@@ -1,10 +1,13 @@
 var faker = require('faker');
 var fs = require('fs');
 
+var primaryId = 0;
 
-const generate = function() {
+
+const generate = function(makeId) {
   var results = '';
   var amountOfReviews = Math.floor(Math.random() * 5) + 5;
+  var id = makeId;
   var timestamp = faker.date.past();
   var name = faker.name.findName();
   var location = faker.fake('{{address.stateAbbr}}');
@@ -15,9 +18,10 @@ const generate = function() {
   var star = Math.ceil(Math.random() * 5);
 
   for (var i = 0; i < amountOfReviews; i++) {
-    results += (`${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`);
+    primaryId++;
+    results += (`${primaryId}, ${id}, ${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`);
+
   }
-  // console.log(results);
   return results;
 };
 
@@ -25,11 +29,11 @@ var start = Date.now();
 var writeStream = fs.createWriteStream('data.csv');
 // writeStream.write('timestamp, name, location, title, comment, likes, dislikes, star\n', 'utf8');
 var count = 0;
-var total = 10000;
+var total = 10000000;
 var write = () => {
   var ready = true;
   while (count < total && ready) {
-    ready = writeStream.write((generate()));
+    ready = writeStream.write((generate(count)));
     count++;
   }
   if (count < total) {
@@ -41,4 +45,4 @@ var write = () => {
 };
 write();
 
-module.exports.generate = generate;
+// module.exports.generate = generate;
