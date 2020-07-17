@@ -15,7 +15,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/public')));
 
 app.get('/api/reviews', (req, res) => {
-  const { id } = req.query;
+  const id = req.query.id;
+  // const { id } = req.query;
   Review.find({ id })
     .exec((err, result) => {
       if (err) { res.sendStatus(500).json('Error while getting reviews'); }
