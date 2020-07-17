@@ -27,7 +27,6 @@ const generate = function(makeId) {
 
 var start = Date.now();
 var writeStream = fs.createWriteStream('data.csv');
-// writeStream.write('timestamp, name, location, title, comment, likes, dislikes, star\n', 'utf8');
 var count = 0;
 var total = 10000000;
 var write = () => {
