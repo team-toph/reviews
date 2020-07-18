@@ -19,7 +19,7 @@ const generate = function(makeId) {
 
   for (var i = 0; i < amountOfReviews; i++) {
     primaryId++;
-    results += (`${primaryId}, ${id}, ${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`);
+    results.concat(`${primaryId}, ${id}, ${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`);
 
   }
   return results;

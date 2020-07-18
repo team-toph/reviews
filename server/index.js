@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
-// const db = require('../db/index.js');
+const db = require('../postgresConnect.js');
 const Review = require('../db/comments.js');
 
 const app = express();
@@ -14,78 +14,47 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/public')));
 
-app.get('/api/reviews', (req, res) => {
+// GET ROUTE ////////////////////////////////
+app.get('/api/reviews', (req, res, next) => {
   const id = req.query.id;
-  // const { id } = req.query;
-  Review.find({ id })
-    .exec((err, result) => {
-      if (err) { res.sendStatus(500).json('Error while getting reviews'); }
-      res.status(200).json(result[0].reviews);
-    });
+  db.query(`select * from reviews where id=${id}`)
+    .then((result) => {
+      res.status(200).json(result.rows);
+    })
+    .catch(next);
 });
 
-app.patch('/api/reviews', (req, res) => {
-  const { id } = req.query;
-  const filter = { _id: req.body._id };
-  const updateLike = !!req.body.like;
-
-  Review.find({ id })
-    .exec((err, result) => {
-      if (err) { console.log('Error getting reviews', err); }
-
-      const allReviews = result[0].reviews;
-
-      for (let i = 0; i < allReviews.length; i++) {
-        if (allReviews[i]._id.toString() === req.body._id) {
-          if (updateLike) {
-            allReviews[i].like += 1;
-          } else {
-            allReviews[i].dislike += 1;
-          }
-          break;
-        }
-      }
-
-      Review.findOneAndUpdate({ id }, { reviews: allReviews }, (err, result) => {
-        if (err) { console.log('Error updating reviews', err); }
-        res.status(200).json(result);
-      });
-    });
-});
-
-// Created a new POST route
-
-app.post('/api/reviews', (req, res) => {
-  req.body.id = req.query.id;
+// POST ROUTE ////////////////////////////////
+app.post('/api/reviews', (req, res, next) => {
   const review = req.body;
-  Review.create(review)
-    .then(() => {
-      res.send('successfully posted review');
+
+  db.query(`INSERT INTO reviews (primaryid, id, timestamp, name, location, title, comment, likes, dislikes, star) VALUES (${review[0].primaryid}, ${review[0].id}, '${review[0].timestamp}', '${review[0].name}', '${review[0].location}', '${review[0].title}', '${review[0].comment}', ${review[0].likes}, ${review[0].dislikes}, ${review[0].star})`)
+    .then((res) => {
+      res.status(200).send(req.body[0]);
     })
-    .catch((error) => console.log(error));
+    .catch(next);
 });
 
-// Created a new PUT route
+// PUT ROUTE //////////////////
+app.put('/api/reviews', (req, res, next) => {
+  var body = req.body[0];
 
-app.put('/api/reviews', (req, res) => {
-  const { id } = req.query;
-  const { body } = req;
-  Review.update({ id }, body)
+  db.query(`UPDATE reviews SET id = ${body.id}, timestamp = '${body.timestamp}', name = '${body.name}', location = '${body.location}', title = '${body.title}', comment = '${body.comment}', likes = ${body.likes}, dislikes = ${body.dislikes}, star = ${body.star} WHERE primaryid=${body.primaryid}`)
     .then(() => {
-      res.send('successfully updated review');
+      res.status(200).send('Update Successful');
     })
-    .catch((error) => console.log(error));
+    .catch(next);
 });
 
-// Created a new DELETE route
+// DELETE ROUTE /////////////////
+app.delete('/api/reviews', (req, res, next) => {
+  const id = req.query.id;
 
-app.delete('/api/reviews', (req, res) => {
-  const { id } = req.query;
-  Review.deleteOne({ id })
+  db.query(`DELETE FROM reviews WHERE id=${id}`)
     .then(() => {
-      res.send('successfully deleted review');
+      res.status(200).send('Delete Successful');
     })
-    .catch((error) => console.log(error));
+    .catch(next);
 });
 
 module.exports = app;

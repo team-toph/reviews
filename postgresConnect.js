@@ -40,8 +40,8 @@ const client = new Client({
 });
 
 const dataCSV = path.join(__dirname, '/data.csv');
-console.log(dataCSV);
 
+// eslint-disable-next-line quotes
 const seed = `\COPY reviews(primaryId, id, timestamp, name, location, title, comment, likes, dislikes, star) FROM '/Users/tonyperletti/reviews/data.csv' DELIMITER ',' CSV HEADER;`;
 
 client.connect()
@@ -50,5 +50,7 @@ client.connect()
   .then(() => client.query(createReviewsTable))
   .then(() => client.query(seed))
   .then(() => console.timeEnd())
-  .catch(err => console.log(err))
-  .then(() => client.end());
+  .catch(err => console.log(err));
+// .then(() => client.end());
+
+module.exports = client;
