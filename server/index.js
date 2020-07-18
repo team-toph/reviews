@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable linebreak-style */
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
