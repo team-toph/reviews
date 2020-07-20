@@ -2,7 +2,7 @@ const db = require('./index.js');
 
 const Samples = require('../faker/faker.js');
 const Review = require('./comments.js');
-const Generate = require('../generateData.js');
+// const Generate = require('../generateData.js');
 
 const _data = [];
 

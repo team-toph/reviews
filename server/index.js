@@ -1,11 +1,9 @@
-/* eslint-disable no-console */
-/* eslint-disable linebreak-style */
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
 const db = require('../postgresConnect.js');
-const Review = require('../db/comments.js');
+// const Review = require('../db/comments.js');
 
 const app = express();
 
@@ -17,8 +15,11 @@ app.use(express.static(path.join(__dirname, '../client/public')));
 // GET ROUTE ////////////////////////////////
 app.get('/api/reviews', (req, res, next) => {
   const id = req.query.id;
+  // console.log(id);
   db.query(`select * from reviews where id=${id}`)
     .then((result) => {
+      // console.log(result);
+      console.log('GET request queried');
       res.status(200).json(result.rows);
     })
     .catch(next);

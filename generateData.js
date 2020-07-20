@@ -3,8 +3,8 @@ var fs = require('fs');
 
 var primaryId = 0;
 
-
 const generate = function(makeId) {
+  // console.log('made it to 1');
   var results = '';
   var amountOfReviews = Math.floor(Math.random() * 5) + 5;
   var id = makeId;
@@ -19,8 +19,7 @@ const generate = function(makeId) {
 
   for (var i = 0; i < amountOfReviews; i++) {
     primaryId++;
-    results.concat(`${primaryId}, ${id}, ${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`);
-
+    results += `${primaryId}, ${id}, ${timestamp}, ${name}, ${location}, ${title}, ${comment}, ${likes}, ${dislikes}, ${star}\n`;
   }
   return results;
 };
@@ -44,4 +43,4 @@ var write = () => {
 };
 write();
 
-// module.exports.generate = generate;
+// module.exports = generate;
