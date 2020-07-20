@@ -28,7 +28,7 @@ const seed = `\COPY reviews(primaryId, id, timestamp, name, location, title, com
 
 // SEED DATABASE SCRIPT
 setup.connect()
-  .then(() => console.ltime())
+  .then(() => console.time())
   .then(() => setup.query('CREATE DATABASE sdc;'))
   .then(() => setup.query(createReviewsTable))
   .then(() => setup.query(seed))
